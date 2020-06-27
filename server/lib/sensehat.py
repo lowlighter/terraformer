@@ -8,7 +8,7 @@ sensehat = SenseHat()
 def sense_dump():
   return {
     "pixels":sensehat.get_pixels(),
-    "lowlight":sensehat.lowlight,
+    "lowlight":sensehat.low_light,
     "gamma":sensehat.gamma,
     "humidity":sensehat.get_humidity(),
     "pressure":sensehat.get_pressure(),
@@ -21,15 +21,15 @@ def sense_dump():
       "radians":sensehat.get_orientation_radians(),
     },
     "compass":{
-      #**sensehat.get_compass(),
+      "value":sensehat.get_compass(),
       "raw":sensehat.get_compass_raw(),
     },
     "gyroscope":{
-      #**sensehat.get_gyroscope(),
+      "value":sensehat.get_gyroscope(),
       "raw":sensehat.get_gyroscope_raw(),
     },
     "accelerometer":{
-      #**sensehat.get_accelerometer(),
+      "value":sensehat.get_accelerometer(),
       "raw":sensehat.get_accelerometer_raw(),
     },
   }
