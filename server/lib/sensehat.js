@@ -115,8 +115,8 @@
       }
 
     /** Dump all data from sense hat */
-      async dump() {
-        return await this.call({func:"sense_dump", context:"locals"})
+      async dump({ledmatrix = false} = {}) {
+        return await this.call({func:"sense_dump", context:"locals", ledmatrix})
       }
 
     /** Options about led matrix */

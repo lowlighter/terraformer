@@ -5,9 +5,9 @@ import os, sys, json
 # Sense hat
 sensehat = SenseHat()
 
-def sense_dump():
+def sense_dump(ledmatrix = False):
   return {
-    "pixels":sensehat.get_pixels(),
+    "pixels":sensehat.get_pixels() if ledmatrix else None,
     "lowlight":sensehat.low_light,
     "gamma":sensehat.gamma,
     "humidity":sensehat.get_humidity(),
