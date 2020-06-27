@@ -15,7 +15,7 @@
 
   async function dump() {
     console.log(await sensehat.dump())
-    setTimeout(dump(3000))
+    setTimeout(dump, 10 *1000)
   }
 
   sensehat.string("Hello world")
