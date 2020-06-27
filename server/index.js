@@ -48,9 +48,9 @@
         const n = neighbors({x, y})
         const a = map[x][y]
 
-        if ((a)&&((n === 2)||(n === 3)))
+        if ((a)&&((n === 2)||(n === 3)||(n === 4)))
           continue
-        if ((!a)&&(n === 3)) {
+        if ((!a)&&((n === 3)||(n === 4))) {
           nmap[x][y] = 1
           continue
         }
@@ -60,7 +60,7 @@
     return nmap
   }
 
-  const sensehat = new SenseHat({log:true})
+  const sensehat = new SenseHat({log:false})
 
 
   function sleep(t) {
