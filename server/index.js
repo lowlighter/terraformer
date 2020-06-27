@@ -18,7 +18,7 @@
     setTimeout(dump(3000))
   }
 
-  sense.string("Hello world")
+  sensehat.string("Hello world")
   dump()
 })()
 
