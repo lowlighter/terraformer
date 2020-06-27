@@ -1,6 +1,6 @@
 //Imports
-  //import Sds011 from "./lib/sds011.js"
-  //import SenseHat from "./lib/sensehat.js"
+  import Sds011 from "./lib/sds011.js"
+  import SenseHat from "./lib/sensehat.js"
 
 ;(async function () {
 
