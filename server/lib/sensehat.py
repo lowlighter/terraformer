@@ -66,7 +66,7 @@ while stdin:
     print(json.dumps({"debug":call}))
     uid = call.pop("uid")
     func = call.pop("func")
-    target = call.pop("context", "sensehat")
+    context = call.pop("context", "sensehat")
   except Exception as error:
     print(json.dumps({"uid":uid, "error":str(error)}))
     continue
@@ -74,7 +74,9 @@ while stdin:
   try:
     if context == "locals":
       print(json.dumps({"uid":uid, "error":None, "result":(locals()[func](**call))}))
-    if context == "sensehat":
+    elif context == "sensehat":
       print(json.dumps({"uid":uid, "error":None, "result":(getattr(sensehat, func)(**call))}))
+    else:
+      print(json.dumps({"uid":uid, "error":"Invalid context {}".format(context), "result":None))
   except Exception as error:
     print(json.dumps({"uid":uid, "error":str(error), "result":None}))
