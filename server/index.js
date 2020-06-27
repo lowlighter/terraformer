@@ -28,15 +28,15 @@ class Sds011 {
         const {hash, checksum, ok} = this.checksum(buffer)
       //Update values if ok
         if (ok) {
-          this.pm25 = ((buffer[this.packet.index.DATA1] << 8) + buffer[this.packet.index.DATA2])/10
-          this.pm10 = ((buffer[this.packet.index.DATA3] << 8) + buffer[this.packet.index.DATA4])/10
-          this.uid = (buffer[this.packet.index.DATA5] << 8) + buffer[this.packet.index.DATA6]
+          this.pm25 = ((buffer[this.packet.index.DATA2] << 8) + buffer[this.packet.index.DATA1])/10
+          this.pm10 = ((buffer[this.packet.index.DATA4] << 8) + buffer[this.packet.index.DATA3])/10
+          this.uid = (buffer[this.packet.index.DATA6] << 8) + buffer[this.packet.index.DATA5]
           this.updated = Date.now()
           this.packet.id++
         }
       //Log if needed
         if (log)
-          console.log(ok ? `${this.dev} : UID = ${this.uid} ; PM2.5 = ${this.pm25} ug/m3 ; PM10 = ${this.pm10} ug/m3` : `${this.dev} : invalid checksum, expected ${checksum.toString("hex")} but got ${hash.toString("hex")}`)
+          console.log(ok ? `${this.dev} : UID = ${this.uid.toString("hex")} ; PM2.5 = ${this.pm25} ug/m3 ; PM10 = ${this.pm10} ug/m3` : `${this.dev} : invalid checksum, expected ${checksum.toString("hex")} but got ${hash.toString("hex")}`)
     }
 
   //Constructor
