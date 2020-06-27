@@ -73,13 +73,13 @@
     const imap = JSON.parse(JSON.stringify(map))
     for (let x = 0; x < 8; x++) {
       for (let y = 0; y < 8; y++) {
-        imap[x][y] = imap[x][y] ? [255, 255, 255] : [0, 0, 0]
+        imap[x][y] = map[x][y] ? [255, 255, 255] : [0, 0, 0]
       }
     }
-    sensehat.pixels(imap)
+    sensehat.pixels(imap.flat(1))
 
     //sensehat.pixel({x:Math.floor(8*Math.random()), y:Math.floor(8*Math.random())}, {r:Math.floor(255*Math.random()), g:Math.floor(255*Math.random()), b:Math.floor(255*Math.random())})
-    await sleep(1)
+    await sleep(5)
   }
 
 
