@@ -147,6 +147,6 @@
       }
 
     /** Python binding file */
-      static py = path.join(path.dirname(import.meta.url.replace(/file:.../, "")), "sensehat.py")
+      static py = path.join(path.dirname(import.meta.url.replace(/file:[/]{2}/, "")), "sensehat.py")
 
   }
