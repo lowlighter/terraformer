@@ -21,15 +21,15 @@ def sense_dump():
       "radians":sensehat.get_orientation_radians(),
     },
     "compass":{
-      **sensehat.get_compass(),
+      #**sensehat.get_compass(),
       "raw":sensehat.get_compass_raw(),
     },
     "gyroscope":{
-      **sensehat.get_gyroscope(),
+      #**sensehat.get_gyroscope(),
       "raw":sensehat.get_gyroscope_raw(),
     },
     "accelerometer":{
-      **sensehat.get_accelerometer(),
+      #**sensehat.get_accelerometer(),
       "raw":sensehat.get_accelerometer_raw(),
     },
   }
