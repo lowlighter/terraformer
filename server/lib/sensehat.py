@@ -77,6 +77,6 @@ while stdin:
     elif context == "sensehat":
       print(json.dumps({"uid":uid, "error":None, "result":(getattr(sensehat, func)(**call))}))
     else:
-      print(json.dumps({"uid":uid, "error":"Invalid context {}".format(context), "result":None))
+      print(json.dumps({"uid":uid, "error":"Invalid context {}".format(context), "result":None}))
   except Exception as error:
     print(json.dumps({"uid":uid, "error":str(error), "result":None}))
