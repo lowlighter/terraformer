@@ -24,11 +24,15 @@
 
 
   const size = 8
+
   let map = []
-  for (let x = 0; x < 8; x++) {
-    map[x] = []
-    for (let y = 0; y < 8; y++) {
-      map[x][y] = Math.round(Math.random())
+
+  function init() {
+    for (let x = 0; x < 8; x++) {
+      map[x] = []
+      for (let y = 0; y < 8; y++) {
+        map[x][y] = Math.round(Math.random())
+      }
     }
   }
 
@@ -48,9 +52,9 @@
         const n = neighbors({x, y})
         const a = map[x][y]
 
-        if ((a)&&((n === 2)||(n === 3)||(n === 4)))
+        if ((a)&&((n === 2)||(n === 3)))
           continue
-        if ((!a)&&((n === 3)||(n === 4))) {
+        if ((!a)&&(n === 3)) {
           nmap[x][y] = 1
           continue
         }
@@ -77,9 +81,15 @@
       }
     }
     sensehat.pixels(imap.flat(1))
+    await sleep(2)
+
+    if (map.flat().reduce((a, b) => a+b, 0) === 0) {
+      init()
+      await sleep(2)
+    }
 
     //sensehat.pixel({x:Math.floor(8*Math.random()), y:Math.floor(8*Math.random())}, {r:Math.floor(255*Math.random()), g:Math.floor(255*Math.random()), b:Math.floor(255*Math.random())})
-    await sleep(5)
+
   }
 
 
