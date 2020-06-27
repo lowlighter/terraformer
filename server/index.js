@@ -1,5 +1,5 @@
 
-const {SerialPort} = require("serialport")
+const SerialPort = require("serialport")
 class Sds011 {
 
   //Baudrate
@@ -48,7 +48,7 @@ class Sds011 {
         this.updated = NaN
         this.uid = null
       //Configure serial port
-        this.serial = new SerialPort(this.dev, {baudrate:this.baudrate})
+        this.serial = new SerialPort(this.dev, {baudrate:this.baudRate})
         this.ready = new Promise((solve, reject) => {
           this.serial.on("open", solve)
           this.serial.on("error", reject)
@@ -63,4 +63,8 @@ class Sds011 {
 
 }
 
-const sds011 = new Sds011({dev:"/dev/ttyUSB0"})
+;(async function () {
+  const sds011 = new Sds011({dev:"/dev/ttyUSB0"})
+  await sds011.ready
+})()
+
