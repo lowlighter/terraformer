@@ -23,6 +23,6 @@ while stdin:
     continue
   # Call required function
   try:
-    print(json.dumps({"uid":uid, "error":None, "result":(sensehat[func](**call))}))
+    print(json.dumps({"uid":uid, "error":None, "result":(getattr(sensehat, func)(**call))}))
   except Exception as error:
     print(json.dumps({"uid":uid, "error":str(error), "result":None}))
