@@ -52,6 +52,9 @@ def joystick_event(event):
   sys.stdout.flush()
 sensehat.stick.direction_any = joystick_event
 
+def set_pixel(x, y, r = 255, g = 255, b = 255):
+  return sensehat.set_pixel(x, y, r, g, b)
+
 # Main loop
 stdin=' '
 while stdin:

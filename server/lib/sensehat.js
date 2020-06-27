@@ -34,8 +34,11 @@
 
     /** Set pixel */
       async pixel({x, y}, {r, g, b, colour} = {}) {
-        if (arguments.length > 1)
-          return await this.call({func:`set_pixel`, x, y, r, g, b, pixel:colour})
+        if (arguments.length > 1) {
+          if (colour)
+            [r, g, b] = colour
+          return await this.call({func:`set_pixel`, context:"locals", x, y, r, g, b})
+        }
         return await this.call({func:`get_pixel`, x, y})
       }
 
