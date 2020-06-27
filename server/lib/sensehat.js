@@ -47,12 +47,12 @@
       }
 
     /** Show string  */
-      async string(text, {speed, colour, background}) {
+      async string(text, {speed, colour, background} = {}) {
         return await this.call({func:`show_message`, text_string:text, scroll_speed:speed, text_colour:colour, back_colour:background})
       }
 
     /** Show letter  */
-      async letter(text, {colour, background}) {
+      async letter(text, {colour, background} = {}) {
         return await this.call({func:`show_letter`, s:text, text_colour:colour, back_colour:background})
       }
 
