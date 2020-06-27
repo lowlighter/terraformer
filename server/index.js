@@ -22,7 +22,7 @@
   dump()*/
 
   for (let i = 0; i < 10; i++) {
-    sensehat.pixel({x:Math.floor(8*Math.random()), y:Math.floor(8*Math.random()), r:Math.floor(255*Math.random()), g:Math.floor(255*Math.random()), b:Math.floor(255*Math.random())})
+    sensehat.pixel({x:Math.floor(8*Math.random()), y:Math.floor(8*Math.random())}, {r:Math.floor(255*Math.random()), g:Math.floor(255*Math.random()), b:Math.floor(255*Math.random())})
   }
 
   await new Promise((solve) => null)
