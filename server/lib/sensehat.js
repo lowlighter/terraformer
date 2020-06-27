@@ -138,7 +138,7 @@
       }
 
     /** Constructor */
-      constructor() {
+      constructor({log = true} = {}) {
         //Python shell
           this.python = new pyshell.PythonShell(SenseHat.py)
           this.events = new Emitter()
@@ -146,7 +146,8 @@
           this.python.on("message", message => {
             try {
               //Print message
-                console.log(`SENSEHAT >>> stdout : ${message}`)
+                if (log)
+                  console.log(`SENSEHAT >>> stdout : ${message}`)
               //Parse message
                 const {uid = null, event = null, error = null, result = null} = JSON.parse(message)
               //Resolve call request if uid given

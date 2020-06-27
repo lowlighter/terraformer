@@ -11,7 +11,7 @@
 
   //const sds011 = new Sds011({dev:"/dev/ttyUSB0"})
   //await sds011.ready
-  const sensehat = new SenseHat()
+  const sensehat = new SenseHat({log:false})
 
   /*async function dump() {
     console.log(await sensehat.dump())
@@ -21,11 +21,16 @@
   sensehat.string("Hello world")
   dump()*/
 
-  for (let i = 0; i < 10; i++) {
-    sensehat.pixel({x:Math.floor(8*Math.random()), y:Math.floor(8*Math.random())}, {r:Math.floor(255*Math.random()), g:Math.floor(255*Math.random()), b:Math.floor(255*Math.random())})
+  function sleep(t) {
+    return new Promise(solve => setTimeout(solve, t*1000))
   }
 
-  await new Promise((solve) => null)
+
+  while (true) {
+    sensehat.pixel({x:Math.floor(8*Math.random()), y:Math.floor(8*Math.random())}, {r:Math.floor(255*Math.random()), g:Math.floor(255*Math.random()), b:Math.floor(255*Math.random())})
+    await sleep(1)
+  }
+
 
 
 
