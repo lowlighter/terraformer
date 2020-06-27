@@ -28,7 +28,7 @@
     /** Set pixels */
       async pixels(pixels = null) {
         if (arguments.length)
-          return await this.call({func:`set_pixels`, pixels})
+          return await this.call({func:`set_pixels`, context:"locals", pixels})
         return await this.call({func:`get_pixels`})
       }
 

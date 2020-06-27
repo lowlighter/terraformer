@@ -60,7 +60,7 @@
     return nmap
   }
 
-  const sensehat = new SenseHat({log:false})
+  const sensehat = new SenseHat({log:true})
 
 
   function sleep(t) {
