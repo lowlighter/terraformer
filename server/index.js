@@ -36,7 +36,7 @@ class Sds011 {
         }
       //Log if needed
         if (log)
-          console.log(ok ? `${this.dev} : UID = ${this.uid.toString("hex")} ; PM2.5 = ${this.pm25} ug/m3 ; PM10 = ${this.pm10} ug/m3` : `${this.dev} : invalid checksum, expected ${checksum.toString("hex")} but got ${hash.toString("hex")}`)
+          console.log(ok ? `${this.dev} : UID = 0x${this.uid.toString(16)} ; PM2.5 = ${this.pm25} ug/m3 ; PM10 = ${this.pm10} ug/m3` : `${this.dev} : invalid checksum, expected 0x${checksum.toString(16)} but got 0x${hash.toString(16)}`)
     }
 
   //Constructor
