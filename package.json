@@ -1,0 +1,23 @@
+{
+  "name": "terraformer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lowlighter/terraformer.git"
+  },
+  "author": "lowlighter (Simon Lecoq)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lowlighter/terraformer/issues"
+  },
+  "homepage": "https://github.com/lowlighter/terraformer#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "serialport": "^9.0.0"
+  }
+}
