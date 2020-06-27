@@ -18,7 +18,7 @@ class Sds011 {
   //Checksum
     checksum(buffer) {
       const checksum = buffer[this.packet.index.CHECKSUM]
-      const hash = (buffer.slice(this.packet.index.DATA1, this.packet.index.DATA6).reduce((a, b) => a + b, 0) & 0xFF)
+      const hash = (buffer.slice(this.packet.index.DATA1, this.packet.index.DATA6+1).reduce((a, b) => a + b, 0) & 0xFF)
       return {hash, checksum, ok:(checksum === hash)}
     }
 
@@ -36,7 +36,7 @@ class Sds011 {
         }
       //Log if needed
         if (log)
-          console.log(ok ? `${this.dev} : UID = ${this.uid} ; PM2.5 = ${this.pm25} ug/m3 ; PM10 = ${this.pm10} ug/m3` : `${this.dev} : invalid checksum, expected ${checksum} but got ${hash}`)
+          console.log(ok ? `${this.dev} : UID = ${this.uid} ; PM2.5 = ${this.pm25} ug/m3 ; PM10 = ${this.pm10} ug/m3` : `${this.dev} : invalid checksum, expected ${checksum.toString("hex")} but got ${hash.toString("hex")}`)
     }
 
   //Constructor
