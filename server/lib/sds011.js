@@ -3,7 +3,7 @@
 
 /**
  * Sds011
- * Air quality component
+ * Air quality sensor
  */
   export default class Sds011 {
 
@@ -42,9 +42,9 @@
         //Log if needed
           if (log) {
             if (ok)
-              console.log(`SERIAL ${this.dev} : UID = 0x${this.uid.toString(16)} ; PM2.5 = ${this.pm25} ug/m3 ; PM10 = ${this.pm10} ug/m3`)
+              console.log(`SERIAL ${this.dev} >>> UID = 0x${this.uid.toString(16)} ; PM2.5 = ${this.pm25} ug/m3 ; PM10 = ${this.pm10} ug/m3`)
             else
-              console.error(`SERIAL ${this.dev} : invalid checksum, expected 0x${checksum.toString(16)} but got 0x${hash.toString(16)}`)
+              console.error(`SERIAL ${this.dev} >>> invalid checksum, expected 0x${checksum.toString(16)} but got 0x${hash.toString(16)}`)
           }
       }
 
@@ -59,14 +59,14 @@
         //Configure serial port
           this.serial = new SerialPort(this.dev, {baudrate:this.baudRate})
           this.ready = new Promise((solve, reject) => {
-            this.serial.on("open", () => { console.log(`SERIAL ${this.dev} : opened`) ; solve() })
-            this.serial.on("error", error => { console.log(`SERIAL ${this.dev} : error while opening ${error.toString()}`) ; reject(error) })
+            this.serial.on("open", () => { console.log(`SERIAL ${this.dev} >>> opened`) ; solve() })
+            this.serial.on("error", error => { console.log(`SERIAL ${this.dev} >>> error while opening ${error.toString()}`) ; reject(error) })
             this.serial.on("data", buffer => this.parse(buffer, log))
           })
       }
 
-    /** Alias for data */
-      get data() {
+    /** Dump all data from sensor */
+      async dump() {
         return {uid:this.uid, pm25:this.pm25, pm10:this.pm10, updated:this.updated, packet:this.packet.id}
       }
 

@@ -1,8 +1,6 @@
 //Imports
-  //import Sds011 from "./lib/sds011.js"
+  import Sds011 from "./lib/sds011.js"
   import SenseHat from "./lib/sensehat.js"
-  import path from "path"
-  import express from "express"
 
 ;(async function () {
 
@@ -13,7 +11,14 @@
 
   //const sds011 = new Sds011({dev:"/dev/ttyUSB0"})
   //await sds011.ready
-  const sense = new SenseHat()
+  const sensehat = new SenseHat()
+
+  async function dump() {
+    console.log(await sensehat.dump())
+    setTimeout(dump(3000))
+  }
+
   sense.string("Hello world")
+  dump()
 })()
 

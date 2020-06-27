@@ -1,8 +1,12 @@
 /** Imports */
   import path from "path"
   import pyshell from "python-shell"
+  import Emitter from "events"
 
-/** Bindings */
+/**
+ * SenseHat
+ * Binding based on python API
+ */
   export default class SenseHat {
 
     /** Rotation */
@@ -111,7 +115,7 @@
       }
 
     /** Dump all data from sense hat */
-      async data() {
+      async dump() {
         return await this.call({func:"sense_dump", context:"locals"})
       }
 
@@ -132,21 +136,39 @@
 
     /** Constructor */
       constructor() {
-        this.python = new pyshell.PythonShell(SenseHat.py)
+        //Python shell
+          this.python = new pyshell.PythonShell(SenseHat.py)
+          this.events = new Emitter()
         //Result and messages handlers
           this.python.on("message", message => {
-            console.log(`>>> ${message}`)
             try {
-              const {uid = null, event = null, error = null, result = null} = JSON.parse(message)
-              this.calls.get(uid)?.[!error ? "solve" : "reject"]?.(result)
-              if (event)
-                console.log(`EVENT : ${event}`)
+              //Print message
+                console.log(`SENSEHAT >>> stdout : ${message}`)
+              //Parse message
+                const {uid = null, event = null, error = null, result = null} = JSON.parse(message)
+              //Resolve call request if uid given
+                if (uid) {
+                  this.calls.get(uid)?.[!error ? "solve" : "reject"]?.(result)
+                  return
+                }
+              //Resolve event if given
+                if (event) {
+                  switch (event) {
+                    case "joystick":{
+                      const [timestamp, direction, action] = result
+                      this.events.emit(event, {timestamp, direction, action})
+                      break
+                    }
+                    default:{
+                      this.events.emit(event, result)
+                    }
+                  }
+                  return
+                }
             }
-            catch (error) {
-              console.error(error)
-            }
+            catch (error) { console.error(error) }
           })
-          this.python.on("stderr", message => console.error(`SenseHat stderr >>> ${message}`))
+          this.python.on("stderr", message => console.error(`SENSEHAT >>> stderr : ${message}`))
       }
 
     /** Close */

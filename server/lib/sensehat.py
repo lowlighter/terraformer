@@ -48,7 +48,7 @@ def wait_for_event(emptybuffer = None):
   return sensehat.stick.wait_for_event(emptybuffer)
 
 def joystick_event(event):
-  print(json.dumps({"event":event}))
+  print(json.dumps({"event":"joystick", "result":event}))
   sys.stdout.flush()
 sensehat.stick.direction_any = joystick_event
 
