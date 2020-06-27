@@ -72,7 +72,7 @@ while stdin:
   # Call required function
   try:
     if context == "locals":
-      print(json.dumps({"uid":uid, "error":None, "result":locals()["func"](**call))}))
+      print(json.dumps({"uid":uid, "error":None, "result":(locals()["func"](**call))}))
     if context == "sensehat":
       print(json.dumps({"uid":uid, "error":None, "result":(getattr(sensehat, func)(**call))}))
   except Exception as error:
