@@ -1,6 +1,6 @@
 //Imports
-  import Sds011 from "./lib/sds011.js"
-  import SenseHat from "./lib/sensehat.js"
+  //import Sds011 from "./lib/sds011.js"
+  //import SenseHat from "./lib/sensehat.js"
 
 ;(async function () {
 
@@ -11,7 +11,7 @@
 
   //const sds011 = new Sds011({dev:"/dev/ttyUSB0"})
   //await sds011.ready
-  const sensehat = new SenseHat({log:false})
+
 
   /*async function dump() {
     console.log(await sensehat.dump())
@@ -21,15 +21,68 @@
   sensehat.string("Hello world")
   dump()*/
 
+
+
+  const size = 8
+  let map = []
+  for (let x = 0; x < 8; x++) {
+    map[x] = []
+    for (let y = 0; y < 8; y++) {
+      map[x][y] = Math.round(Math.random())
+    }
+  }
+
+
+  function neighbors({x, y}) {
+    return [
+      {x:((x-1)+size)%size, y:((y-1)+size)%size}, {x, y:((y-1)+size)%size}, {x:((x+1)+size)%size, y:((y-1)+size)%size},
+      {x:((x-1)+size)%size, y}, {x:((x+1)+size)%size, y},
+      {x:((x-1)+size)%size, y:((y+1)+size)%size}, {x, y:((y+1)+size)%size}, {x:((x+1)+size)%size, y:((y+1)+size)%size}
+    ].map(({x, y}) => map[x][y]).filter(c => c).length
+  }
+
+  function next(map) {
+    const nmap = JSON.parse(JSON.stringify(map))
+    for (let x = 0; x < 8; x++) {
+      for (let y = 0; y < 8; y++) {
+        const n = neighbors({x, y})
+        const a = map[x][y]
+
+        if ((a)&&((n === 2)||(n === 3)))
+          continue
+        if ((!a)&&(n === 3)) {
+          nmap[x][y] = 1
+          continue
+        }
+        nmap[x][y] = 0
+      }
+    }
+    return nmap
+  }
+
+  const sensehat = new SenseHat({log:false})
+
+
   function sleep(t) {
     return new Promise(solve => setTimeout(solve, t*1000))
   }
 
 
   while (true) {
-    sensehat.pixel({x:Math.floor(8*Math.random()), y:Math.floor(8*Math.random())}, {r:Math.floor(255*Math.random()), g:Math.floor(255*Math.random()), b:Math.floor(255*Math.random())})
+    map = next(map)
+    const imap = JSON.parse(JSON.stringify(map))
+    for (let x = 0; x < 8; x++) {
+      for (let y = 0; y < 8; y++) {
+        imap[x][y] = imap[x][y] ? [255, 255, 255] : [0, 0, 0]
+      }
+    }
+    sensehat.pixels(imap)
+
+    //sensehat.pixel({x:Math.floor(8*Math.random()), y:Math.floor(8*Math.random())}, {r:Math.floor(255*Math.random()), g:Math.floor(255*Math.random()), b:Math.floor(255*Math.random())})
     await sleep(1)
   }
+
+
 
 
 
