@@ -56,7 +56,7 @@ def set_pixel(x, y, r = 255, g = 255, b = 255):
   return sensehat.set_pixel(x, y, r, g, b)
 
 def set_pixels(pixels):
-  return sensehat.set_pixel(pixels)
+  return sensehat.set_pixels(pixels)
 
 # Main loop
 stdin=' '
