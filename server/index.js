@@ -52,7 +52,7 @@ class Sds011 {
         this.ready = new Promise((solve, reject) => {
           this.serial.on("open", solve)
           this.serial.on("error", reject)
-          this.serial.on("data", buffer => this.parse(buffer))
+          this.serial.on("data", buffer => this.parse(buffer, true))
         })
     }
 
@@ -64,7 +64,9 @@ class Sds011 {
 }
 
 ;(async function () {
+  console.log("Opening...")
   const sds011 = new Sds011({dev:"/dev/ttyUSB0"})
   await sds011.ready
+  console.log("Opened")
 })()
 
