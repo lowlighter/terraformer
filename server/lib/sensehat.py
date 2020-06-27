@@ -57,6 +57,7 @@ stdin=' '
 while stdin:
   # Read line
   sys.stdout.flush()
+  sys.stderr.flush()
   stdin = sys.stdin.readline()
   # Load json
   call = uid = func = context = None
