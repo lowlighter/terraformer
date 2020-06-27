@@ -36,6 +36,7 @@
     }
   }
 
+  init()
 
   function neighbors({x, y}) {
     return [
