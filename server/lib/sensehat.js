@@ -110,6 +110,26 @@
         return await this.call({func:`get_accelerometer${raw ? "_raw" : ""}`})
       }
 
+    /** Dump all data from sense hat */
+      async data() {
+        return await this.call({func:"sense_dump", context:"locals"})
+      }
+
+    /** Options about led matrix */
+      async ledmatrix({lowlight = null, gamma = null}) {
+        return await this.call({func:"configure_ledmatrix", context:"locals", low_light:lowlight, gamma})
+      }
+
+    /** Block everything until joystick event */
+      async waitfor({emptybuffer = false} = {}) {
+        return await this.call({func:"get_events", context:"locals", emptybuffer})
+      }
+
+    /** All events happened since last call */
+      async events() {
+        return await this.call({func:"get_events", context:"locals"})
+      }
+
     /** Constructor */
       constructor() {
         this.python = new pyshell.PythonShell(SenseHat.py)
@@ -117,8 +137,10 @@
           this.python.on("message", message => {
             console.log(`>>> ${message}`)
             try {
-              const {uid = null, error = null, result = null} = JSON.parse(message)
+              const {uid = null, event = null, error = null, result = null} = JSON.parse(message)
               this.calls.get(uid)?.[!error ? "solve" : "reject"]?.(result)
+              if (event)
+                console.log(`EVENT : ${event}`)
             }
             catch (error) {
               console.error(error)
