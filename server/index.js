@@ -9,16 +9,16 @@
   import cors from "cors"
   import data from "./lib/data.js"
   import sleep from "./lib/sleep.js"
-  import {program} from "commander"
+  import commander from "commander"
 
 //Entry point
   ;(async () => {
     //Configuration
-      program
+      commander.program
         .option("-p --port", "HTTP server port", 3000)
         .option("-v --verbose", "Verbose", false)
         .option("-r --raspberry", "Execution on raspberry (may be disabled to develop on another computer instead)", true)
-      const {verbose:log, port, raspberry} = program.parse(process.argv)
+      const {verbose:log, port, raspberry} = commander.program.parse(process.argv)
 
     //Setup server
       const app = express()
