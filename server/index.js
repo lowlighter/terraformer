@@ -21,7 +21,7 @@
     //Setup server
       const app = express()
       const server = http.createServer(app)
-      app.get("/data", (req, res) => res.json({...sds011.dump(), ...sensehat.dump({ledmatrix:true})}))
+      app.get("/data", async (req, res) => res.json({...(await sds011.dump()), ...(await sensehat.dump({ledmatrix:true}))}))
 
     //Static resources
       const dirname = path.dirname(url.fileURLToPath(import.meta.url))
