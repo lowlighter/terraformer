@@ -37,6 +37,14 @@
       ].forEach(({uri, location}) => app.use(uri, express.static(location)))
       server.listen(port, () => console.log(`Listening on ${port}`))
 
+    //Other data source server
+      if (ip) {
+        console.log(`Will tell clients to redirect /data calls to ${ip}`)
+        app.get("/server", (req, res) => res.send(`http://${ip}`))
+      }
+      else
+        app.get("/server", (req, res) => res.send(""))
+
     //Enable sensors
       if (sensors) {
         //Wait for sensors to be ready
@@ -59,13 +67,5 @@
             await sleep(5)
           }
       }
-
-    //Other data source server
-      if (ip) {
-        console.log(`Will tell clients to redirect /data calls to ${ip}`)
-        app.get("/server", (req, res) => res.send(`http://${ip}`))
-      }
-      else
-        app.get("/server", (req, res) => res.send(""))
 
   })()
