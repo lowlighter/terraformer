@@ -48,7 +48,7 @@
           const io = socketio(server)
           sensehat.event.on("joystick", data => io.emit("joystick", data))
           while (true) {
-            data.refresh({sds011, sensehat, log})
+            await data.refresh({sds011, sensehat, log})
             await sleep(5)
           }
       }

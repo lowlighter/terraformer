@@ -10,7 +10,7 @@
       temperature_from_humidity:[],
       temperature_from_pressure:[],
     /** Refresh data from sensors */
-      refresh({sds011, sensehat, log = false}) {
+      async refresh({sds011, sensehat, log = false}) {
         //Dump sensors
           const t = new Date()
           if (log)
