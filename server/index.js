@@ -14,11 +14,13 @@
 //Entry point
   ;(async () => {
     //Configuration
-      commander.program
-        .option("-p --port", "HTTP server port", 3000)
-        .option("-v --verbose", "Verbose", false)
-        .option("-r --raspberry", "Execution on raspberry (may be disabled to develop on another computer instead)", true)
-      const {verbose:log, port, raspberry} = commander.program.parse(process.argv)
+      const {verbose:log, port, sensors, ip} = commander.program
+        .option("--port <port>", "HTTP server port", 3000)
+        .option("-v | --verbose", "Verbose", false)
+        .option("-s | --sensors", "Execution with sensors", true)
+        .option("-S | --no-sensors", "Execution without sensors")
+        .option("--ip <ip>", "Get data from another HTTP server", null)
+        .parse(process.argv)
 
     //Setup server
       const app = express()
@@ -34,24 +36,33 @@
         {uri:"/js", location:path.join(dirname, "../node_modules", "/chart.js/dist")},
       ].forEach(({uri, location}) => app.use(uri, express.static(location)))
 
-    //Raspberry mode
-      if (raspberry) {
+    //Enable sensors
+      if (sensors) {
         //Wait for sensors to be ready
           const sensehat = new SenseHat({log})
           const sds011 = new Sds011({dev:"/dev/ttyUSB0", log})
           await Promise.all([sensehat.ready, sds011.ready])
 
         //Additional routes
-          app.get("/data", cors({origin:"*"}), async (req, res) => res.json(data.dump))
+          app.get("/data", cors({origin:"*"}), async (req, res) => res.json(data.zip))
+          app.get("/data/dump", cors({origin:"*"}), async (req, res) => res.json(data.dump))
+          app.get("/data/records", cors({origin:"*"}), async (req, res) => res.json(data.records))
 
         //Socket server
           const io = socketio(server)
           sensehat.event.on("joystick", data => io.emit("joystick", data))
           while (true) {
             await data.refresh({sds011, sensehat, log})
+            io.emit("data", data.zip)
             await sleep(5)
           }
       }
+
+    //Other data source server
+      if (ip)
+        app.get("/server", (req, res) => res.send(`http://${ip}`))
+      else
+        app.get("/server", (req, res) => res.send(""))
 
     //Start server
       server.listen(port, () => console.log(`Listening on ${port}`))

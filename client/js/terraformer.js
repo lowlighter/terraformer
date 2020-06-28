@@ -19,13 +19,16 @@
     ledmatrix:"Matrice de LEDs",
   }
 
+  const server = (await axios.get("/server")).data || location.href
+
   const data = {
     lang,
-    ...(await axios.get("/data")).data
+    ...(await axios.get(`${server}/data`)).data
   }
 
-  const socket = io(location.href)
+  const socket = io(server)
   socket.on("joystick", data => console.log(data))
+  socket.on("data", data => console.log(data))
   const app = new Vue({el:"main", data})
 
 
