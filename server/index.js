@@ -59,8 +59,10 @@
       }
 
     //Other data source server
-      if (ip)
+      if (ip) {
+        console.log(`Will tell clients to redirect /data calls to ${ip}`)
         app.get("/server", (req, res) => res.send(`http://${ip}`))
+      }
       else
         app.get("/server", (req, res) => res.send(""))
 
