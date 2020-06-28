@@ -175,7 +175,10 @@
           })
           this.python.on("stderr", message => console.error(`SENSEHAT >>> stderr : ${message}`))
         //Ready
-          this.ready = new Promise(solve => solve())
+          this.ready = new Promise(solve => {
+            console.log("SENSEHAT >>> ready")
+            solve()
+          })
       }
 
     /** Close */
