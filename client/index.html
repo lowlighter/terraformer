@@ -1,84 +1,35 @@
 <html>
   <head>
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="/css/styles.css">
   </head>
   <body>
 
     <main>
-      <div class="panel environment">
-        <header>{{ lang.environment }}</header>
-        <div class="body">
-          <table>
-            <tr>
-              <td class="c">🧭</td>
-              <td class="r">{{ sensehat.compass.value.toFixed() }}°</td>
-            </tr>
-            <tr>
-              <td class="c">🌡️</td>
-              <td class="r">{{ ((sensehat.temperature.humidity + sensehat.temperature.pressure)/2).toFixed(1) }} °C</td>
-            </tr>
-            <tr>
-              <td class="c">💧</td>
-              <td class="r">{{ sensehat.humidity.toFixed() }}%</td>
-            </tr>
-            <tr>
-              <td class="c">🕰️</td>
-              <td class="r">{{ sensehat.pressure.toFixed(2) }} hPa</td>
-            </tr>
-            <tr>
-              <td class="c">🦠</td>
-              <td class="r">{{ "" }}</td>
-            </tr>
-          </table>
-        </div>
+
+      <v-environment :lang="lang" :sensehat="sensehat" :sds011="sds011"></v-environment>
+
+      <v-graphs :lang="lang" :records="records" :graphs="['temperature', 'humidity', 'pressure']">{{ lang.environment_over_24_hours }}</v-graphs>
+      <v-graphs :lang="lang" :records="records" :graphs="['pm25', 'pm10']">{{ lang.air_quality }}</v-graphs>
+
+      <div class="flex-wrapper">
+        <v-directional-sensor :lang="lang" :sensehat="sensehat" sensor="gyroscope"></v-directional-sensor>
+        <v-directional-sensor :lang="lang" :sensehat="sensehat" sensor="accelerometer"></v-directional-sensor>
+        <v-ledmatrix :lang="lang" :sensehat="sensehat"></v-ledmatrix>
       </div>
 
-      <div class="panel">
-        <header>{{ lang.environment_over_24_hours }}</header>
-        <div class="body graphs">
-          <canvas class="graph temperature"></canvas>
-          <canvas class="graph humidity"></canvas>
-          <canvas class="graph pressure"></canvas>
-        </div>
-      </div>
 
-      <div class="panel">
-        <header>{{ lang.air_quality }}</header>
-        <div class="body graphs">
-          <canvas class="graph pm25"></canvas>
-          <canvas class="graph pm10"></canvas>
-        </div>
-      </div>
 
-      <div class="panel" v-for="sensor in ['gyroscope', 'accelerometer']" :key="sensor">
-        <header>{{ lang[sensor] }}</header>
-        <div class="body">
-          <table>
-            <tr v-for="axis in ['roll', 'pitch', 'yaw']" :key="axis">
-              <td>{{ lang[axis] }}</td>
-              <td class="r">{{ sensehat.orientation.degrees[axis].toFixed() }}°</td>
-              <td class="r">{{ sensehat.orientation.radians[axis].toFixed(2) }} rad</td>
-            </tr>
-          </table>
-        </div>
-      </div>
 
-      <div class="panel">
-        <header>{{ lang.ledmatrix }}</header>
-        <div class="body">
-          <div class="ledmatrix">
-            <div class="pixel" v-for="pixel in sensehat.pixels" :style="{backgroundColor:`rgba(${pixel.join(',')},.4)`}"></div>
-          </div>
-        </div>
-      </div>
 
     </main>
 
-    <script src="js/vue.min.js"></script>
-    <script src="js/Chart.bundle.min.js"></script>
-    <script src="js/axios.min.js"></script>
-    <script src="js/socket.io.js"></script>
-    <script src="js/terraformer.js"></script>
+    <script src="/js/vue.min.js"></script>
+    <script src="/js/Chart.bundle.min.js"></script>
+    <script src="/js/axios.min.js"></script>
+    <script src="/js/socket.io.js"></script>
+    <script src="/js/httpVueLoader.js"></script>
+    <script src="/js/terraformer.js"></script>
+
 
   </body>
 </html>

@@ -22,6 +22,7 @@
     "commander": "^5.1.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "http-vue-loader": "^1.4.2",
     "python-shell": "^2.0.1",
     "serialport": "^9.0.0",
     "socket.io": "^2.3.0",
