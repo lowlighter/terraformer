@@ -54,13 +54,13 @@
           const sensehat = new SenseHat({log})
           const sds011 = new Sds011({dev:"/dev/ttyUSB0", log})
           await Promise.all([sensehat.ready, sds011.ready])
-
-          sensehat.letter("L", {colour:[0, 0, 0], background:[255, 255, 255]})
+          console.log("Loaded sensors")
 
         //Additional routes
           app.get("/data", cors(), async (req, res) => res.json(data.zip))
           app.get("/data/dump", cors(), async (req, res) => res.json(data.dump))
           app.get("/data/records", cors(), async (req, res) => res.json(data.records))
+          console.log(`Refreshing sensors data each ${refresh} seconds`)
 
         //Socket server
           const io = socketio(server)
