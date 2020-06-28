@@ -68,7 +68,7 @@
           while (true) {
             await data.refresh({sds011, sensehat, log})
             io.emit("data", data.zip)
-            await sleep(refresh*1000)
+            await sleep(refresh)
           }
       }
 
