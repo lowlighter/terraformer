@@ -1,0 +1,18 @@
+{
+  "gyroscope":"Gyroscope",
+  "accelerometer":"Accéléromètre",
+  "roll":"Roulis",
+  "pitch":"Tangage",
+  "yaw":"Lacet",
+  "air_quality":"Qualité de l'air",
+  "environment":"Environement",
+  "environment_over_24_hours":"Environement (dernières 24 heures)",
+  "temperature":"Temperature (°C)",
+  "temperature_from_humidity":"Par humidité",
+  "temperature_from_pressure":"Par pression",
+  "humidity":"Humidité (%)",
+  "pressure":"Pression (hPa)",
+  "pm25":"PM₂.₅ (µg/m³)",
+  "pm10":"PM₁₀ (µg/m³)",
+  "ledmatrix":"Matrice de LEDs"
+}

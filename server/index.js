@@ -30,6 +30,7 @@
       const dirname = path.dirname(url.fileURLToPath(import.meta.url))
       ;[
         {uri:"/", location:path.join(dirname, "../client")},
+        {uri:"/lang", location:path.join(dirname, "lang")},
         {uri:"/js", location:path.join(dirname, "../node_modules", "/socket.io-client/dist")},
         {uri:"/js", location:path.join(dirname, "../node_modules", "/vue/dist")},
         {uri:"/js", location:path.join(dirname, "../node_modules", "/axios/dist")},
@@ -52,6 +53,8 @@
           const sensehat = new SenseHat({log})
           const sds011 = new Sds011({dev:"/dev/ttyUSB0", log})
           await Promise.all([sensehat.ready, sds011.ready])
+
+          sensehat.letter("L", {colour:[0, 0, 0], background:[255, 255, 255]})
 
         //Additional routes
           app.get("/data", cors(), async (req, res) => res.json(data.zip))

@@ -1,132 +1,79 @@
 ;(async function () {
 
-  const lang = {
-    gyroscope:"Gyroscope",
-    accelerometer:"Accéléromètre",
-    roll:"Roulis",
-    pitch:"Tangage",
-    yaw:"Lacet",
-    air_quality:"Qualité de l'air",
-    environment:"Environement",
-    environment_over_24_hours:"Environement (dernières 24 heures)",
-    temperature:"Temperature (°C)",
-    temperature_from_humidity:"Par humidité",
-    temperature_from_pressure:"Par pression",
-    humidity:"Humidité (%)",
-    pressure:"Pression (hPa)",
-    pm25:"PM₂.₅ (µg/m³)",
-    pm10:"PM₁₀ (µg/m³)",
-    ledmatrix:"Matrice de LEDs",
-  }
+  //Load server location and connect to sockets
+    const server = (await axios.get("/server")).data || location.href
+    const socket = io(server)
 
-  const server = (await axios.get("/server")).data || location.href
+  //Lang and initial data
+    const {data:lang} = await axios.get("/lang/fr.json")
+    const {data:init} = await axios.get(`${server}/data`)
+    const data = {lang, ...init}
 
-  const data = {
-    lang,
-    ...(await axios.get(`${server}/data`)).data
-  }
-
-  const socket = io(server)
-  socket.on("joystick", data => console.log(data))
-  socket.on("data", data => console.log(data))
-  const app = new Vue({el:"main", data})
-
-
-  function graph({selector = "", title = "", data = []}) {
-    const colors = ["#3480EA", "#2F3689", "#4E5FB7"]
-    Chart.defaults.global.defaultFontColor = "#FFFFFF"
-    return new Chart(document.querySelector(selector).getContext("2d"), {
-      type:"line",
-      data:{
-        datasets:data.map(({label, values}, index) => { return {
-            label,
-            borderColor:colors[index],
-            borderWidth:1,
-            backgroundColor:`${colors[index]}69`,
-            data:values
-          }
-        })
-      },
-      options:{
-        responsive:true,
-        title:{
-          display:(title.length > 0),
-          text:title,
-        },
-        scales:{
-          xAxes:[{
-            type:"time",
-            distribution:"linear",
-            time: {
-              displayFormats:{
-                hour:"H[h]"
-              }
-            }
-          }]
-        },
-        legend:{
-          display:true,
-          position:"bottom",
-        }
+  //App
+    const app = new Vue({
+      el:"main",
+      data,
+      computed:{
+        sensehat() { return this.$data.dump.sensehat },
+        sds011() { return this.$data.dump.sds011 },
       }
     })
-  }
 
-  ;[
-    {
-      selector:".temperature.graph",
-      data:[
-        {
-          label:lang.temperature,
-          values:[{t:new Date("2015-3-15 13:3"), y:1}, {t:new Date("2015-3-25 14:2"), y:4}]
+
+  socket.on("joystick", data => console.log(data))
+  socket.on("data", data => console.log(data))
+
+  //Graphs
+    ;[
+      {selector:".temperature.graph", data:["temperature", "temperature_from_humidity", "temperature_from_pressure"].map(k => { return {label:lang[k], values:init.records[k]}})},
+      {selector:".humidity.graph", data:[{label:lang.humidity, values:init.records.pressure}]},
+      {selector:".pressure.graph", data:[{label:lang.pressure, values:init.records.pressure}]},
+      {selector:".pm25.graph", data:[{label:lang.pm25, values:init.records.pm25}]},
+      {selector:".pm10.graph", data:[{label:lang.pm10, values:init.records.pm10}]}
+    ].map(graph)
+
+
+  /** Grapher */
+    function graph({selector = "", title = "", data = []}) {
+      const colors = ["#3480EA", "#2F3689", "#4E5FB7"]
+      Chart.defaults.global.defaultFontColor = "#FFFFFF"
+      return new Chart(document.querySelector(selector).getContext("2d"), {
+        type:"line",
+        data:{
+          datasets:data.map(({label, values}, index) => { return {
+              label,
+              borderColor:colors[index],
+              borderWidth:1,
+              backgroundColor:`${colors[index]}69`,
+              data:values
+            }
+          })
         },
-        {
-          label:lang.temperature_from_humidity,
-          values:[{t:new Date("2015-3-15 13:3"), y:1}, {t:new Date("2015-3-25 14:2"), y:4}]
-        },
-        {
-          label:lang.temperature_from_pressure,
-          values:[{t:new Date("2015-3-15 13:3"), y:3}, {t:new Date("2015-3-25 14:2"), y:7}]
-        },
-      ]
-    },
-    {
-      selector:".humidity.graph",
-      data:[
-        {
-          label:lang.humidity,
-          values:[{t:new Date("2015-3-15 13:3"), y:1}, {t:new Date("2015-3-25 14:2"), y:4}]
-        },
-      ]
-    },
-    {
-      selector:".pressure.graph",
-      data:[
-        {
-          label:lang.pressure,
-          values:[{t:new Date("2015-3-15 13:3"), y:1}, {t:new Date("2015-3-25 14:2"), y:4}]
-        },
-      ]
-    },
-    {
-      selector:".pm25.graph",
-      data:[
-        {
-          label:lang.pm25,
-          values:[{t:new Date("2015-3-15 13:3"), y:1}, {t:new Date("2015-3-25 14:2"), y:4}]
-        },
-      ]
-    },
-    {
-      selector:".pm10.graph",
-      data:[
-        {
-          label:lang.pm10,
-          values:[{t:new Date("2015-3-15 13:3"), y:1}, {t:new Date("2015-3-25 14:2"), y:4}]
-        },
-      ]
+        options:{
+          responsive:true,
+          title:{
+            display:(title.length > 0),
+            text:title,
+          },
+          scales:{
+            xAxes:[{
+              type:"time",
+              distribution:"linear",
+              time: {
+                displayFormats:{
+                  hour:"H[h]"
+                }
+              }
+            }]
+          },
+          legend:{
+            display:true,
+            position:"bottom",
+          }
+        }
+      })
     }
-  ].map(graph)
+
 
   /*
 function addData(chart, label, data) {
