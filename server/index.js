@@ -44,9 +44,9 @@
           await Promise.all([sensehat.ready, sds011.ready])
 
         //Additional routes
-          app.get("/data", cors({origin:"*"}), async (req, res) => res.json(data.zip))
-          app.get("/data/dump", cors({origin:"*"}), async (req, res) => res.json(data.dump))
-          app.get("/data/records", cors({origin:"*"}), async (req, res) => res.json(data.records))
+          app.get("/data", cors(), async (req, res) => res.json(data.zip))
+          app.get("/data/dump", cors(), async (req, res) => res.json(data.dump))
+          app.get("/data/records", cors(), async (req, res) => res.json(data.records))
 
         //Socket server
           const io = socketio(server)
