@@ -1,3 +1,6 @@
+# This is a python interface based on https://pythonhosted.org/sense-hat/api/
+# It allows mapping with NodeJS without the need of rewriting the whole library for conveniency
+
 # Imports
 from sense_hat import SenseHat, ACTION_PRESSED, ACTION_HELD, ACTION_RELEASED
 import os, sys, json
@@ -9,7 +12,7 @@ def sense_dump(ledmatrix = False):
   return {
     "pixels":sensehat.get_pixels() if ledmatrix else None,
     "lowlight":sensehat.low_light,
-    "gamma":sensehat.gamma,
+    "gamma":sensehat.gamma if ledmatrix else None,
     "humidity":sensehat.get_humidity(),
     "pressure":sensehat.get_pressure(),
     "temperature":{

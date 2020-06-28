@@ -2,6 +2,7 @@
   import path from "path"
   import pyshell from "python-shell"
   import Emitter from "events"
+  import url from "url"
 
 /**
  * SenseHat
@@ -141,7 +142,7 @@
       constructor({log = true} = {}) {
         //Python shell
           this.python = new pyshell.PythonShell(SenseHat.py)
-          this.events = new Emitter()
+          this.event = new Emitter()
         //Result and messages handlers
           this.python.on("message", message => {
             try {
@@ -160,11 +161,11 @@
                   switch (event) {
                     case "joystick":{
                       const [timestamp, direction, action] = result
-                      this.events.emit(event, {timestamp, direction, action})
+                      this.event.emit(event, {timestamp, direction, action})
                       break
                     }
                     default:{
-                      this.events.emit(event, result)
+                      this.event.emit(event, result)
                     }
                   }
                   return
@@ -173,6 +174,8 @@
             catch (error) { console.error(error) }
           })
           this.python.on("stderr", message => console.error(`SENSEHAT >>> stderr : ${message}`))
+        //Ready
+          this.ready = new Promise(solve => solve())
       }
 
     /** Close */
@@ -195,6 +198,6 @@
       }
 
     /** Python binding file */
-      static py = path.join(path.dirname(import.meta.url.replace(/file:[/]{2}/, "")), "sensehat.py")
+      static py = path.join(path.dirname(url.fileURLToPath(import.meta.url)), "sensehat.py")
 
   }

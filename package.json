@@ -17,8 +17,12 @@
   },
   "homepage": "https://github.com/lowlighter/terraformer#readme",
   "dependencies": {
+    "axios": "^0.19.2",
+    "chart.js": "^2.9.3",
     "express": "^4.17.1",
     "python-shell": "^2.0.1",
-    "serialport": "^9.0.0"
+    "serialport": "^9.0.0",
+    "socket.io": "^2.3.0",
+    "vue": "^2.6.11"
   }
 }
