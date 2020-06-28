@@ -35,6 +35,7 @@
         {uri:"/js", location:path.join(dirname, "../node_modules", "/axios/dist")},
         {uri:"/js", location:path.join(dirname, "../node_modules", "/chart.js/dist")},
       ].forEach(({uri, location}) => app.use(uri, express.static(location)))
+      server.listen(port, () => console.log(`Listening on ${port}`))
 
     //Enable sensors
       if (sensors) {
@@ -66,8 +67,5 @@
       }
       else
         app.get("/server", (req, res) => res.send(""))
-
-    //Start server
-      server.listen(port, () => console.log(`Listening on ${port}`))
 
   })()
