@@ -14,12 +14,13 @@
 //Entry point
   ;(async () => {
     //Configuration
-      const {verbose:log, port, sensors, ip} = commander.program
+      const {verbose:log, port, sensors, ip, refresh} = commander.program
         .option("--port <port>", "HTTP server port", 3000)
         .option("-v | --verbose", "Verbose", false)
         .option("-s | --sensors", "Execution with sensors", true)
         .option("-S | --no-sensors", "Execution without sensors")
         .option("--ip <ip>", "Get data from another HTTP server", null)
+        .option("--refresh <refresh>", "Frequency of each data refres", 5)
         .parse(process.argv)
 
     //Setup server
@@ -67,7 +68,7 @@
           while (true) {
             await data.refresh({sds011, sensehat, log})
             io.emit("data", data.zip)
-            await sleep(5)
+            await sleep(refresh*1000)
           }
       }
 

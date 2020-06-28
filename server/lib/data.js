@@ -29,7 +29,7 @@
           ;["humidity", "pressure"].forEach(k => records[k].push({t, y:d.sensehat[k]}))
           records.temperature_from_humidity.push({t, y:d.sensehat.temperature.humidity})
           records.temperature_from_pressure.push({t, y:d.sensehat.temperature.pressure})
-          records.temperature.push({t, y:.5*(d.sensehat.temperature.humidity+sensehat.temperature.pressure)})
+          records.temperature.push({t, y:.5*(d.sensehat.temperature.humidity+d.sensehat.temperature.pressure)})
       },
   }
 export default data

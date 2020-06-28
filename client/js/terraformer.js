@@ -21,17 +21,20 @@
 
 
   socket.on("joystick", data => console.log(data))
-  socket.on("data", data => console.log(data))
+  socket.on("data", ({dump, records}) => {
+    data.dump = dump
+    ;["humidity", "pressure", "pm25", "pm10"].forEach(id => graph.update({id, datasets:[records[id]]}))
+    graph.update({id:"temperature", datasets:[records.temperature, records.temperature_from_humidity, records.temperature_from_pressure]})
+  })
 
   //Graphs
-    ;[
-      {selector:".temperature.graph", data:["temperature", "temperature_from_humidity", "temperature_from_pressure"].map(k => { return {label:lang[k], values:init.records[k]}})},
-      {selector:".humidity.graph", data:[{label:lang.humidity, values:init.records.pressure}]},
-      {selector:".pressure.graph", data:[{label:lang.pressure, values:init.records.pressure}]},
-      {selector:".pm25.graph", data:[{label:lang.pm25, values:init.records.pm25}]},
-      {selector:".pm10.graph", data:[{label:lang.pm10, values:init.records.pm10}]}
-    ].map(graph)
-
+    const graphs = new Map([
+      {id:"temperature", selector:".temperature.graph", data:["temperature", "temperature_from_humidity", "temperature_from_pressure"].map(k => { return {label:lang[k], values:init.records[k]}})},
+      {id:"humidity", selector:".humidity.graph", data:[{label:lang.humidity, values:init.records.pressure}]},
+      {id:"pressure", selector:".pressure.graph", data:[{label:lang.pressure, values:init.records.pressure}]},
+      {id:"pm25", selector:".pm25.graph", data:[{label:lang.pm25, values:init.records.pm25}]},
+      {id:"pm10", selector:".pm10.graph", data:[{label:lang.pm10, values:init.records.pm10}]}
+    ].map(({id, ...options}) => [id, graph(options)]))
 
   /** Grapher */
     function graph({selector = "", title = "", data = []}) {
@@ -71,6 +74,16 @@
             position:"bottom",
           }
         }
+      })
+    }
+
+  /** Graph updater */
+    graph.update = function ({id, datasets}) {
+      const g = graphs.get(id)
+      datasets.forEach(values => {
+        g.data.datasets[0].data = values.map(({y}) => y)
+        g.data.labels = values.map(({t}) => t)
+        g.update()
       })
     }
 
