@@ -10,13 +10,13 @@
 //Entry point
   ;(async () => {
     //Configuration
-      const log = false
+      const log = true
       const port = 3000
 
     //Wait for sensors to be ready
       const sensehat = new SenseHat({log})
       const sds011 = new Sds011({dev:"/dev/ttyUSB0", log})
-      await Promise.all(sensehat.ready, sds011.ready)
+      await Promise.all([sensehat.ready, sds011.ready])
 
     //Setup server
       const app = express()
