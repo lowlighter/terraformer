@@ -12,7 +12,7 @@
   import axios from "axios"
 
 /** Server app */
-  export default async function ({log = false, port = 3000, sensors = null, camera = null, ip = null, refresh = 5}) {
+  export default async function ({verbose:log = false, port = 3000, sensors = null, camera = null, ip = null, refresh = 5}) {
     //Setup server
       const app = express()
       const server = http.createServer(app)
