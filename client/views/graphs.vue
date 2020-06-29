@@ -3,8 +3,10 @@
     <header>
       <slot></slot>
     </header>
-    <div class="body graphs">
-      <canvas class="graph" :class="graph" :key="graph" v-for="graph in graphs"></canvas>
+    <div class="body">
+      <div class="graphs">
+        <canvas class="graph" :class="graph" :key="graph" v-for="graph in graphs"></canvas>
+      </div>
     </div>
   </div>
 </template>
@@ -28,7 +30,7 @@
                       borderColor:colors[index],
                       borderWidth:1,
                       backgroundColor:`${colors[index]}69`,
-                      data:values.map(({t, y}) => { return {t:`${new Date(t).getHours()}h`, y} })
+                      data:values
                     }
                   })
                 },
@@ -39,6 +41,15 @@
                     text:title,
                   },
                   scales:{
+                    xAxes:[{
+                      type:"time",
+                      time: {
+                        displayFormats:{
+                          unit:"hour",
+                          hour:"H[h]"
+                        }
+                      }
+                    }],
                     yAxes: [{
                       ticks: {
                         suggestedMin:min,
@@ -59,7 +70,7 @@
               if (graph) {
                 datasets.forEach(values => {
                   graph.data.datasets[0].data = values.map(({y}) => y)
-                  graph.data.labels = values.map(({t}) => `${new Date(t).getHours()}h`)
+                  graph.data.labels = values.map(({t}) => t)
                   graph.update()
                 })
               }
@@ -84,3 +95,12 @@
         }
     }
 </script>
+
+<style scoped>
+  .graphs {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: center;
+  }
+</style>

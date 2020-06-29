@@ -1,8 +1,10 @@
 <template>
   <div class="panel">
     <header>{{ lang.camera }}</header>
-    <div class="body camera">
-      <img :class="[uid]">
+    <div class="body">
+      <div class="camera">
+        <img :class="[uid]">
+      </div>
     </div>
   </div>
 </template>
@@ -41,3 +43,15 @@
         }
     }
 </script>
+
+<style scoped>
+  .camera {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .camera img {
+    border-radius: .5rem;
+  }
+</style>
