@@ -1,7 +1,7 @@
 <template>
   <div class="panel">
-    <header></header>
-    <div class="body">
+    <header>{{ lang.camera }}</header>
+    <div class="body camera">
       <img :class="[uid]">
     </div>
   </div>
@@ -31,13 +31,13 @@
           //Reload image
             reload() {
               const time = new Date().getTime()
-              this.img.src = `cam_pic.php?time=${time}`
+              this.img.src = `${this.endpoint}/cam_pic.php?time=${time}`
             },
         },
       //Mounted
         mounted() {
-          this.img.onload = this.reload
-          this.img.onerror = () => setTimeout(() => this.reload(), 100)
+          this.img.onerror = this.img.onload = this.reload
+          this.reload()
         }
     }
 </script>

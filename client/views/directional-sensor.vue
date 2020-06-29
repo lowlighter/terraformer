@@ -1,5 +1,5 @@
 <template>
-  <div class="panel" :key="sensor">
+  <div class="panel" :key="sensor" v-if="sensehat">
     <header>{{ lang[sensor] }}</header>
     <div class="body">
       <table>

@@ -9,12 +9,14 @@
   import cors from "cors"
   import data from "./data.js"
   import sleep from "./lib/sleep.js"
+  import axios from "axios"
 
 /** Server app */
-  export default async function ({log = false, port = 3000, sensors = "", ip = null, refresh = 5}) {
+  export default async function ({log = false, port = 3000, sensors = null, camera = null, ip = null, refresh = 5}) {
     //Setup server
       const app = express()
       const server = http.createServer(app)
+      const io = socketio(server)
 
     //Static resources
       const dirname = path.dirname(url.fileURLToPath(import.meta.url))
@@ -37,9 +39,19 @@
       else
         app.get("/server", (req, res) => res.send(""))
 
+    //Enable camera
+      if (camera) {
+        const [_, username, password, server, port] = camera.match(/(\w+):(\w+)@([\w.]+):(\d+)/)
+        console.log(`Loaded camera on ${server}:${port}`)
+        app.get("/camera.jpg", cors(), async (req, res) => {
+          const {data} = await axios.get(`http://${server}:${port}/cam_pic.php`, {auth:{username, password}, responseType:"stream"})
+          data.pipe(res)
+        })
+      }
+
     //Enable sensors
-      sensors = sensors.split(",").filter(sensor => sensor.length)
-      if (sensors.length) {
+      sensors = sensors?.split(",")?.filter(sensor => sensor.length)
+      if (sensors) {
         //Wait for sensors to be ready
           console.log(`Loading sensors : ${sensors.join(", ")}`)
           const sensehat = sensors.includes("sensehat") ? new SenseHat({log}) : null
@@ -51,18 +63,26 @@
           app.get("/data", cors(), async (req, res) => res.json(data.zip))
           app.get("/data/dump", cors(), async (req, res) => res.json(data.dump))
           app.get("/data/records", cors(), async (req, res) => res.json(data.records))
-          console.log(`Refreshing sensors data each ${refresh} seconds`)
 
-        //Socket server
-          const io = socketio(server)
-          if (sensors.includes("sensehat"))
+        //Sensehat
+          if (sensors.includes("sensehat")) {
             sensehat.event.on("joystick", data => io.emit("joystick", data))
+            app.post("/ledmatrix", async (req, res) => {
+              const {x = NaN, y = NaN, r = NaN, g = NaN, b = NaN} = req.body
+              if ([x, y, r, g, b].reduce((a, b) => a || Number.isNaN(b), false))
+                return res.sendStatus(400)
+              sensehat.pixel({x, y}, {r, g, b})
+              res.sendStatus(200)
+            })
+          }
 
         //Loop refreshing
+          console.log(`Refreshing sensors data each ${refresh} seconds`)
           while (true) {
             await data.refresh({sds011, sensehat, log})
             io.emit("data", data.zip)
             await sleep(refresh)
           }
       }
+
   }

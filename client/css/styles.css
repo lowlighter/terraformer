@@ -92,6 +92,16 @@ table td.c {
   flex-direction: column;
 }
 
+.camera {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.camera img {
+  border-radius: .5rem;
+}
+
 .flex-wrapper > * {
   flex: 1;
   width: calc(100% - 2rem);

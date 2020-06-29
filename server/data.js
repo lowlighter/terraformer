@@ -37,6 +37,10 @@
             records.temperature.push({t, y:.5*(d.sensehat.temperature.humidity+d.sensehat.temperature.pressure)})
           }
           data.dump = d
+        //Filter old data
+          t.setHours(t.getHours() - 12)
+          for (let [key, record] of Object.entries(records))
+            records[key] = record.filter(r => r.t >= t)
       },
   }
 export default data

@@ -1,5 +1,5 @@
 <template>
-  <div class="panel">
+  <div class="panel" v-if="sensehat">
     <header>{{ lang.ledmatrix }}</header>
     <div class="body">
       <div class="ledmatrix">

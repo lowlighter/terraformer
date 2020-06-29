@@ -4,20 +4,26 @@
   </head>
   <body>
 
+    <img src="/camera" alt="">
+
     <main>
 
+      <v-camera-view :lang="lang" :endpoint="'http://192.168.1.109:4649'"></v-camera-view>
+
+      <!-- Environment -->
       <v-environment :lang="lang" :sensehat="sensehat" :sds011="sds011"></v-environment>
 
-      <v-graphs :lang="lang" :records="records" :graphs="['temperature', 'humidity', 'pressure']">{{ lang.environment_over_24_hours }}</v-graphs>
-      <v-graphs :lang="lang" :records="records" :graphs="['pm25', 'pm10']">{{ lang.air_quality }}</v-graphs>
+      <!-- Graphs -->
+      <v-graphs :lang="lang" :records="records" :graphs="['temperature', 'humidity', 'pressure']" v-if="sensehat">{{ lang.environment_over_24_hours }}</v-graphs>
+      <v-graphs :lang="lang" :records="records" :graphs="['pm25', 'pm10']" v-if="sds011">{{ lang.air_quality }}</v-graphs>
 
+      <!-- Directional sensors and led matrix -->
       <div class="flex-wrapper">
         <v-directional-sensor :lang="lang" :sensehat="sensehat" sensor="gyroscope"></v-directional-sensor>
         <v-directional-sensor :lang="lang" :sensehat="sensehat" sensor="accelerometer"></v-directional-sensor>
         <v-ledmatrix :lang="lang" :sensehat="sensehat"></v-ledmatrix>
       </div>
 
-      <v-camera-view :lang="lang" :endpoint="'192.168.1.109:4649'"></v-camera-view>
 
     </main>
 
