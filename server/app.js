@@ -27,10 +27,10 @@
         `DATA REFRESH       : ${refresh}s`,
         `SERVER PORT        : ${port}`,
         `  RASPBERRY SERVER : ${ip ?? "(localhost)"}`,
+        `  CAMERA           : ${camera ? `true (${camera[0]}:*******@${camera[2]}:${camera[3]})` : "false"}`,
         `ENABLED SENSORS    : ${sensors.length}`,
         `  SENSEHAT         : ${sensors.includes("sensehat")}`,
         `  SDS011           : ${sensors.includes("sds011")}`,
-        `  CAMERA           : ${camera ? `true (${camera[0]}:*******@${camera[2]}:${camera[3]})` : "false"}`,
         ``,
       ].join("\n"))
 
