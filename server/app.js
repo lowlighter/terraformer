@@ -33,8 +33,12 @@
         ``,
       ].join("\n"))
 
-    //Static resources
+    //Base server
+      app.use(express.json())
+      app.use(express.urlencoded({extended:true}))
       app.get("/server", (req, res) => res.send(ip ? `http://${ip}` : ""))
+
+    //Static resources
       const dirname = path.dirname(url.fileURLToPath(import.meta.url))
       ;[
         {uri:"/", location:path.join(dirname, "../client")},
