@@ -41,7 +41,7 @@
       sensors = sensors.split(",")
       if (sensors.length) {
         //Wait for sensors to be ready
-          console.log("Loading sensors")
+          console.log(`Loading sensors : ${sensors.join(", ")}`)
           const sensehat = sensors.includes("sensehat") ? new SenseHat({log}) : null
           const sds011 = sensors.includes("sds011") ? new Sds011({dev:"/dev/ttyUSB0", log}) : null
           await Promise.all([sensehat?.ready, sds011?.ready])
