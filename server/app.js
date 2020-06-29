@@ -18,7 +18,23 @@
       const server = http.createServer(app)
       const io = socketio(server)
 
+    //Format and display settings
+      sensors = sensors?.split(",")?.filter(sensor => sensor.length) || []
+      camera = camera?.match(/(\w+):(\w+)@([\w.]+):(\d+)/)?.slice(1) || null
+      console.log([
+        `SETTINGS ===================================`,
+        `LOG                : ${log}`,
+        `SERVER PORT        : ${port}`,
+        `  RASPBERRY SERVER : ${ip ?? "(localhost)"}`,
+        `ENABLED SENSORS    : ${sensors.length}`,
+        `  SENSEHAT         : ${sensors.includes("sensehat")}`,
+        `  SDS011           : ${sensors.includes("sds011")}`,
+        `  CAMERA           : ${camera ? `true (${camera[0]}:*******@${camera[2]}:${camera[3]})` : "false"}`,
+        ``,
+      ].join("\n"))
+
     //Static resources
+      app.get("/server", (req, res) => res.send(ip ? `http://${ip}` : ""))
       const dirname = path.dirname(url.fileURLToPath(import.meta.url))
       ;[
         {uri:"/", location:path.join(dirname, "../client")},
@@ -31,18 +47,10 @@
       ].forEach(({uri, location}) => app.use(uri, express.static(location)))
       server.listen(port, () => console.log(`Listening on ${port}`))
 
-    //Other data source server
-      if (ip) {
-        console.log(`Will tell clients to redirect /data calls to ${ip}`)
-        app.get("/server", (req, res) => res.send(`http://${ip}`))
-      }
-      else
-        app.get("/server", (req, res) => res.send(""))
-
     //Enable camera
       if (camera) {
-        const [_, username, password, server, port] = camera.match(/(\w+):(\w+)@([\w.]+):(\d+)/)
-        console.log(`Loaded camera on ${server}:${port}`)
+        const [username, password, server, port] = camera
+        console.log(`CAMERA >> ${username}:*******@${server}:${port}`)
         app.get("/camera.jpg", cors(), async (req, res) => {
           const {data} = await axios.get(`http://${server}:${port}/cam_pic.php`, {auth:{username, password}, responseType:"stream"})
           data.pipe(res)
@@ -50,14 +58,12 @@
       }
 
     //Enable sensors
-      sensors = sensors?.split(",")?.filter(sensor => sensor.length)
-      if (sensors) {
+      if (sensors.length) {
         //Wait for sensors to be ready
-          console.log(`Loading sensors : ${sensors.join(", ")}`)
           const sensehat = sensors.includes("sensehat") ? new SenseHat({log}) : null
           const sds011 = sensors.includes("sds011") ? new Sds011({dev:"/dev/ttyUSB0", log}) : null
           await Promise.all([sensehat?.ready, sds011?.ready])
-          console.log("Loaded sensors")
+          console.log("SENSORS >> ok")
 
         //Additional routes
           app.get("/data", cors(), async (req, res) => res.json(data.zip))
@@ -77,7 +83,6 @@
           }
 
         //Loop refreshing
-          console.log(`Refreshing sensors data each ${refresh} seconds`)
           while (true) {
             await data.refresh({sds011, sensehat, log})
             io.emit("data", data.zip)
