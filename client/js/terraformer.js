@@ -1,7 +1,7 @@
 ;(async function () {
 
   //Load server location and connect to sockets
-    const server = (await axios.get("/server")).data || location.href
+    const server = (await axios.get("/server")).data || location.href.replace(/\/$/, "")
     const socket = io(server)
 
   //Lang and initial data
