@@ -2,20 +2,18 @@
   <head>
     <title>🌏 Terraformer</title>
     <link rel="stylesheet" href="/css/styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </head>
   <body>
 
     <main>
 
+      <!-- Environment, camera and Ledmatrix-->
       <div class="wrapper s3">
         <v-environment :lang="lang" :sensehat="sensehat" :sds011="sds011"></v-environment>
         <v-camera-view :lang="lang" :endpoint="'http://192.168.1.109:4649'"></v-camera-view>
         <v-ledmatrix :lang="lang" :sensehat="sensehat"></v-ledmatrix>
       </div>
-
-
-      <!-- Environment -->
-
 
       <!-- Graphs -->
       <v-graphs :lang="lang" :records="records" :graphs="['temperature', 'humidity', 'pressure']" v-if="sensehat">{{ lang.environment_over_24_hours }}</v-graphs>
