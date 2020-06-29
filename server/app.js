@@ -44,7 +44,7 @@
           console.log("Loading sensors")
           const sensehat = sensors.includes("sensehat") ? new SenseHat({log}) : null
           const sds011 = sensors.includes("sds011") ? new Sds011({dev:"/dev/ttyUSB0", log}) : null
-          await Promise.all([sensehat.ready, sds011.ready])
+          await Promise.all([sensehat?.ready, sds011?.ready])
           console.log("Loaded sensors")
 
         //Additional routes
