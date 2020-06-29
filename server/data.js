@@ -17,7 +17,7 @@
         return {dump:this.dump, records:this.records}
       },
     /** Refresh data from sensors */
-      async refresh({records = true, sds011 = null, sensehat = null, log = false}) {
+      async refresh({recording = true, sds011 = null, sensehat = null, log = false}) {
         //Dump sensors
           const t = Date.now()
           const {records} = data
@@ -32,7 +32,7 @@
           }
           if (sensehat) {
             d.sensehat = await sensehat.dump({ledmatrix:true})
-            if (records) {
+            if (recording) {
               ;["humidity", "pressure"].forEach(k => records[k].push({t, y:d.sensehat[k]}))
               records.temperature_from_humidity.push({t, y:d.sensehat.temperature.humidity})
               records.temperature_from_pressure.push({t, y:d.sensehat.temperature.pressure})

@@ -82,7 +82,7 @@
               if ([x, y, r, g, b].reduce((a, b) => a || Number.isNaN(b), false))
                 return res.sendStatus(400)
               sensehat.pixel({x, y}, {r, g, b})
-              await data.refresh({sensehat, log, records:false})
+              await data.refresh({sensehat, log, recording:false})
               io.emit("data", data.zip)
               res.sendStatus(200)
             })
