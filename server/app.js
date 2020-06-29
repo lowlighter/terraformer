@@ -6,7 +6,6 @@
   import http from "http"
   import socketio from "socket.io"
   import url from "url"
-  import cors from "cors"
   import data from "./data.js"
   import sleep from "./lib/sleep.js"
   import axios from "axios"
@@ -56,7 +55,7 @@
       if (camera) {
         const [username, password, server, port] = camera
         console.log(`CAMERA >> ${username}:*******@${server}:${port}`)
-        app.get("/camera.jpg", cors(), async (req, res) => {
+        app.get("/camera.jpg", async (req, res) => {
           const {data} = await axios.get(`http://${server}:${port}/cam_pic.php`, {auth:{username, password}, responseType:"stream"})
           data.pipe(res)
         })
@@ -71,18 +70,20 @@
           console.log("SENSORS >> ok")
 
         //Additional routes
-          app.get("/data", cors(), async (req, res) => res.json(data.zip))
-          app.get("/data/dump", cors(), async (req, res) => res.json(data.dump))
-          app.get("/data/records", cors(), async (req, res) => res.json(data.records))
+          app.get("/data", async (req, res) => res.json(data.zip))
+          app.get("/data/dump", async (req, res) => res.json(data.dump))
+          app.get("/data/records", async (req, res) => res.json(data.records))
 
         //Sensehat
           if (sensors.includes("sensehat")) {
             sensehat.event.on("joystick", data => io.emit("joystick", data))
-            app.post("/ledmatrix", cors(), async (req, res) => {
+            app.post("/ledmatrix", async (req, res) => {
               const {x = NaN, y = NaN, r = NaN, g = NaN, b = NaN} = req.body
               if ([x, y, r, g, b].reduce((a, b) => a || Number.isNaN(b), false))
                 return res.sendStatus(400)
               sensehat.pixel({x, y}, {r, g, b})
+              await data.refresh({sensehat, log, records:false})
+              io.emit("data", data.zip)
               res.sendStatus(200)
             })
           }
@@ -93,6 +94,19 @@
             io.emit("data", data.zip)
             await sleep(refresh)
           }
+      }
+    //Handle remot
+      else {
+        //Redirects
+          const redirect = {
+            async get(req, res) { res.json((await axios.get(`http://${ip}${req.path}`)).data) },
+            async post(req, res) { res.json((await axios.post(`http://${ip}${req.path}`, req.body)).data) },
+          }
+        //Additional routes
+          app.get("/data", redirect.get)
+          app.get("/data/dump", redirect.get)
+          app.get("/data/records", redirect.get)
+          app.post("/ledmatrix", redirect.post)
       }
 
   }

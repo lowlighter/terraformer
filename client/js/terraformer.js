@@ -6,7 +6,7 @@
 
   //Lang and initial data
     const {data:lang} = await axios.get("/lang/fr.json")
-    const {data:init} = await axios.get(`${server}/data`)
+    const {data:init} = await axios.get("/data")
     const data = {lang, ...init}
 
   //Components
