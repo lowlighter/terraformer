@@ -67,7 +67,7 @@
         //Sensehat
           if (sensors.includes("sensehat")) {
             sensehat.event.on("joystick", data => io.emit("joystick", data))
-            app.post("/ledmatrix", async (req, res) => {
+            app.post("/ledmatrix", cors(), async (req, res) => {
               const {x = NaN, y = NaN, r = NaN, g = NaN, b = NaN} = req.body
               if ([x, y, r, g, b].reduce((a, b) => a || Number.isNaN(b), false))
                 return res.sendStatus(400)
