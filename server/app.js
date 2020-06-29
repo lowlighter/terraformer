@@ -11,7 +11,7 @@
   import sleep from "./lib/sleep.js"
 
 /** Server app */
-  export default async function ({log = false, port = 3000, sensors = true, ip = null, refresh = 5}) {
+  export default async function ({log = false, port = 3000, sensors = "", ip = null, refresh = 5}) {
     //Setup server
       const app = express()
       const server = http.createServer(app)
@@ -38,11 +38,12 @@
         app.get("/server", (req, res) => res.send(""))
 
     //Enable sensors
+      sensors = sensors.split(",")
       if (sensors) {
         //Wait for sensors to be ready
           console.log("Loading sensors")
-          const sensehat = sensors.sensehat ? new SenseHat({log}) : null
-          const sds011 = sensors.sds011 ? new Sds011({dev:"/dev/ttyUSB0", log}) : null
+          const sensehat = sensors.includes("sensehat") ? new SenseHat({log}) : null
+          const sds011 = sensors.includes("sds011") ? new Sds011({dev:"/dev/ttyUSB0", log}) : null
           await Promise.all([sensehat.ready, sds011.ready])
           console.log("Loaded sensors")
 
