@@ -39,7 +39,7 @@
 
     //Enable sensors
       sensors = sensors.split(",")
-      if (sensors) {
+      if (sensors.length) {
         //Wait for sensors to be ready
           console.log("Loading sensors")
           const sensehat = sensors.includes("sensehat") ? new SenseHat({log}) : null
@@ -55,7 +55,10 @@
 
         //Socket server
           const io = socketio(server)
-          sensehat.event.on("joystick", data => io.emit("joystick", data))
+          if (sensors.includes("sensehat"))
+            sensehat.event.on("joystick", data => io.emit("joystick", data))
+
+        //Loop refreshing
           while (true) {
             await data.refresh({sds011, sensehat, log})
             io.emit("data", data.zip)
