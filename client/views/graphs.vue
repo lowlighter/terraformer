@@ -28,7 +28,7 @@
                       borderColor:colors[index],
                       borderWidth:1,
                       backgroundColor:`${colors[index]}69`,
-                      data:values
+                      data:values.map(({t, y}) => { return {t:`${new Date(t).getHours()}h`, y} })
                     }
                   })
                 },
@@ -39,16 +39,6 @@
                     text:title,
                   },
                   scales:{
-                    xAxes:[{
-                      type:"time",
-                      time: {
-                        displayFormats:{
-                          //parser:"MM/DD/YYYY HH:mm",
-                          //tooltipFormat:"ll HH:mm",
-                          hour:"H[h]"
-                        }
-                      },
-                    }],
                     yAxes: [{
                       ticks: {
                         suggestedMin:min,
@@ -69,7 +59,7 @@
               if (graph) {
                 datasets.forEach(values => {
                   graph.data.datasets[0].data = values.map(({y}) => y)
-                  graph.data.labels = values.map(({t}) => t)
+                  graph.data.labels = values.map(({t}) => `${new Date(t).getHours()}h`)
                   graph.update()
                 })
               }

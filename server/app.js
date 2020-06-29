@@ -24,6 +24,7 @@
       console.log([
         `SETTINGS ===================================`,
         `LOG                : ${log}`,
+        `DATA REFRESH       : ${refresh}s`,
         `SERVER PORT        : ${port}`,
         `  RASPBERRY SERVER : ${ip ?? "(localhost)"}`,
         `ENABLED SENSORS    : ${sensors.length}`,
