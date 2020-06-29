@@ -38,7 +38,7 @@
         app.get("/server", (req, res) => res.send(""))
 
     //Enable sensors
-      sensors = sensors.split(",")
+      sensors = sensors.split(",").filter(sensor => sensor.length)
       if (sensors.length) {
         //Wait for sensors to be ready
           console.log(`Loading sensors : ${sensors.join(", ")}`)
