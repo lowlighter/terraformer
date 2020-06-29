@@ -19,7 +19,7 @@
     /** Refresh data from sensors */
       async refresh({sds011 = null, sensehat = null, log = false}) {
         //Dump sensors
-          const t = new Date()
+          const t = Date.now()
           const {records} = data
           const d = {}
           if (log)
@@ -38,9 +38,8 @@
           }
           data.dump = d
         //Filter old data
-          t.setHours(t.getHours() - 12)
           for (let [key, record] of Object.entries(records))
-            records[key] = record.filter(r => r.t.getTime() >= t.getTime())
+            records[key] = record.filter(r => r.t >= t - 12*60*60*1000)
       },
   }
 export default data
