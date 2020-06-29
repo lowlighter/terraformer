@@ -41,8 +41,8 @@
       if (sensors) {
         //Wait for sensors to be ready
           console.log("Loading sensors")
-          const sensehat = new SenseHat({log})
-          const sds011 = new Sds011({dev:"/dev/ttyUSB0", log})
+          const sensehat = sensors.sensehat ? new SenseHat({log}) : null
+          const sds011 = sensors.sds011 ? new Sds011({dev:"/dev/ttyUSB0", log}) : null
           await Promise.all([sensehat.ready, sds011.ready])
           console.log("Loaded sensors")
 
