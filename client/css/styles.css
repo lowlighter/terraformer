@@ -109,19 +109,37 @@ input {
     max-width: 10000px;
   }
 
-  .wrapper {
-    display: grid;
+  @supports (display: grid) {
+    .wrapper {
+      display: grid;
+    }
+
+    .wrapper.s2 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .wrapper.s3 {
+      grid-template-columns: repeat(3, 1fr);
+    }
   }
 
-  .wrapper.s2 {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  @supports not (display: grid) {
+    .wrapper {
+      display: flex;
+      flex-direction: row;
+    }
 
-  .wrapper.s3 {
-    grid-template-columns: repeat(3, 1fr);
+    .wrapper.s2 > *{
+      width: 50%;
+    }
+
+    .wrapper.s3 > * {
+      width: 33%;
+    }
   }
 
   .wrapper > * {
     height: 100%;
   }
 }
+
