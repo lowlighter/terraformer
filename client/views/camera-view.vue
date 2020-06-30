@@ -39,8 +39,8 @@
         },
       //Mounted
         mounted() {
-          this.img.onload = this.reload.bind(null, {delay:1000})
-          this.img.onerror = this.reload.bind(null, {delay:250})
+          this.img.onload = this.reload.bind(null)
+          this.img.onerror = this.reload.bind(null, {delay:1000})
           this.reload()
         }
     }
