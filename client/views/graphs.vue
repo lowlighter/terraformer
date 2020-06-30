@@ -44,16 +44,22 @@
                     xAxes:[{
                       type:"time",
                       time: {
+                        unit:"hour",
                         displayFormats:{
-                          unit:"hour",
                           hour:"H[h]"
                         }
+                      },
+                      gridLines: {
+                        display:false
                       }
                     }],
                     yAxes: [{
                       ticks: {
                         suggestedMin:min,
                         suggestedMax:max,
+                      },
+                      gridLines: {
+                        display:false
                       }
                     }]
                   },

@@ -8,12 +8,10 @@
 
     <main>
 
-      <v-camera-view :lang="lang" :endpoint="'http://192.168.1.109:4649'"></v-camera-view>
-
-      <!-- Environment, camera and Ledmatrix-->
+      <!-- Environment, camera and LED matrix-->
       <div class="wrapper s3">
         <v-environment :lang="lang" :sensehat="sensehat" :sds011="sds011"></v-environment>
-        <v-camera-view :lang="lang" :endpoint="'http://192.168.1.109:4649'"></v-camera-view>
+        <v-camera-view :lang="lang"></v-camera-view>
         <v-ledmatrix :lang="lang" :sensehat="sensehat"></v-ledmatrix>
       </div>
 
@@ -21,18 +19,13 @@
       <v-graphs :lang="lang" :records="records" :graphs="['temperature', 'humidity', 'pressure']" v-if="sensehat">{{ lang.environment_over_24_hours }}</v-graphs>
       <v-graphs :lang="lang" :records="records" :graphs="['pm25', 'pm10']" v-if="sds011">{{ lang.air_quality }}</v-graphs>
 
-      <!-- Directional sensors and led matrix -->
+      <!-- Directional sensors -->
       <div class="wrapper s2">
         <v-directional-sensor :lang="lang" :sensehat="sensehat" sensor="gyroscope"></v-directional-sensor>
         <v-directional-sensor :lang="lang" :sensehat="sensehat" sensor="accelerometer"></v-directional-sensor>
       </div>
 
-
     </main>
-
-    <style>
-
-    </style>
 
     <script src="/js/vue.min.js"></script>
     <script src="/js/Chart.bundle.min.js"></script>
@@ -40,7 +33,6 @@
     <script src="/js/socket.io.js"></script>
     <script src="/js/httpVueLoader.js"></script>
     <script src="/js/terraformer.js"></script>
-
 
   </body>
 </html>

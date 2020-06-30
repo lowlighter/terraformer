@@ -13,7 +13,7 @@
   //Exports
     module.exports = {
       //Properties
-        props:["lang", "endpoint"],
+        props:["lang"],
       //Data
         data() {
           return {
@@ -31,14 +31,16 @@
       //Methods
         methods:{
           //Reload image
-            reload() {
-              const time = new Date().getTime()
-              this.img.src = `${this.endpoint}/cam_pic.php?time=${time}`
+            async reload({delay = 0} = {}) {
+              if (delay)
+                await new Promise(solve => setTimeout(solve, delay))
+              this.img.src = `/camera.jpg?t=${Date.now()}`
             },
         },
       //Mounted
         mounted() {
-          this.img.onerror = this.img.onload = this.reload
+          this.img.onload = this.reload.bind(null, {delay:1000})
+          this.img.onerror = this.reload.bind(null, {delay:250})
           this.reload()
         }
     }

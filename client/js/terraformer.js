@@ -13,6 +13,7 @@
     Vue.component("v-environment", httpVueLoader("views/environment.vue"))
     Vue.component("v-graphs", httpVueLoader("views/graphs.vue"))
     Vue.component("v-directional-sensor", httpVueLoader("views/directional-sensor.vue"))
+    Vue.component("v-directional-view", httpVueLoader("views/directional-view.vue"))
     Vue.component("v-ledmatrix", httpVueLoader("views/ledmatrix.vue"))
     Vue.component("v-camera-view", httpVueLoader("views/camera-view.vue"))
 
