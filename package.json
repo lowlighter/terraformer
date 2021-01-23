@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/lowlighter/terraformer#readme",
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "chart.js": "^2.9.3",
     "commander": "^5.1.0",
     "express": "^4.17.1",
